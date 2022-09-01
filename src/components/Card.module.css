@@ -1,0 +1,15 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 90%;
+}
+
+
+.card {
+  background-color: rgb(187, 187, 187);
+}
+
+.name {
+  color: rgb(22, 36, 113);
+}
+
