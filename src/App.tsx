@@ -12,9 +12,8 @@ function App() {
   // const dispatch = useDispatch();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(FetchEmployeesData());
-  },[dispatch]);
+  // https://reactjs.org/warnings/invalid-hook-call-warning.html
+  dispatch(FetchEmployeesData());
 
   return (
     <div>

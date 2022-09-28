@@ -1,4 +1,4 @@
-import { employeeActions } from "./employee-slice";
+import { replaceEmployee } from "./employee-slice";
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 import { useAppSelector, useAppDispatch } from "./hooks";
 
@@ -7,7 +7,9 @@ export const FetchEmployeesData = () => {
   const dispatch = useAppDispatch();
   return async () => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:3000/employee");
+      const response = await fetch("http://localhost:3000/employee", {
+        mode: 'no-cors'
+      });
 
       if (!response.ok) {
         throw new Error("Could not fetch cart data");
@@ -22,7 +24,7 @@ export const FetchEmployeesData = () => {
       // Fetch data from backend API
       const employeeData = await fetchData();
       dispatch(
-        employeeActions.replaceEmployee([])
+        replaceEmployee([])
       );
     } catch (error) {
       console.log("error msg:", error);

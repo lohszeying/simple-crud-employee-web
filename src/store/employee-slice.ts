@@ -5,9 +5,9 @@ interface EmployeeState {
   employees: Array<any>
 }
 
-const initialState: EmployeeState = {
+const initialState = {
   employees: new Array<any>()
-}
+} as EmployeeState
 
 const employeeSlice = createSlice({
   name: "employee",
@@ -19,5 +19,5 @@ const employeeSlice = createSlice({
   }
 });
 
-export const employeeActions = employeeSlice.actions;
-export default employeeSlice;
+export const {replaceEmployee} = employeeSlice.actions;
+export default employeeSlice.reducer;
