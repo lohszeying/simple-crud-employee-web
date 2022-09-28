@@ -1,8 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "./index";
+import type { RootState } from ".";
 
+interface Employee {
+  id: number,
+  name: string,
+  salary: number,
+  department: string
+}
 interface EmployeeState {
-  employees: Array<any>
+  employees: Employee[]
 }
 
 const initialState = {
@@ -13,11 +19,11 @@ const employeeSlice = createSlice({
   name: "employee",
   initialState,
   reducers: {
-    replaceEmployee: (state, action: PayloadAction<Array<any>>) => {
-      state.employees = action.payload;
+    addEmployee: (state, action: PayloadAction<Employee>) => {
+      state.employees.push(action.payload);
     }
   }
 });
 
-export const {replaceEmployee} = employeeSlice.actions;
+export const {addEmployee} = employeeSlice.actions;
 export default employeeSlice.reducer;
