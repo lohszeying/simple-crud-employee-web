@@ -4,9 +4,8 @@ import axios from 'axios';
 import { useAppSelector, useAppDispatch } from "./hooks";
 
 export const FetchEmployeesData = () => {
-  // const count = useAppSelector(state => state.counter.value)
   const dispatch = useAppDispatch();
-  return async (dispatch: Dispatch) => {
+  return async () => {
     const fetchData = async () => {
       const response = await fetch("http://localhost:3000/employee");
 
