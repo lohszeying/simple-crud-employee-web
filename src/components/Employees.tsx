@@ -9,9 +9,9 @@ import { useAppDispatch } from "../store/hooks";
 
 const Employees = () => {
   const dispatch = useAppDispatch();
+  
   useEffect(() => {
-      dispatch(fetchAllEmployees());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(fetchAllEmployees());
   }, []);
 
   const employees = useSelector((state: RootState) => state.employee.employees);

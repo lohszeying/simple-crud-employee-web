@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { bindActionCreators, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Employee } from "../model/employee";
 
@@ -21,13 +21,16 @@ export const fetchAllEmployees = createAsyncThunk(
 export const deleteEmployee = createAsyncThunk(
   'employees/delete',
   // Declare the type your function argument here:
-  async (payload, thunkApi) => {
-    const response = await axios.delete(`http://localhost:3000/employee/${payload}`);
+  async (payload: number, thunkApi) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/employee/${payload}`);
 
-    return response.data.employees as Employee[];
+      return payload as number;
+    } catch (e) {
+      return thunkApi.rejectWithValue(e);
+    }
   }
 );
-
 
 interface EmployeeState {
   employees: Employee[]
@@ -54,11 +57,15 @@ const employeeSlice = createSlice({
     builder.addCase(fetchAllEmployees.rejected, (state, action) => {
       state.status = 'rejected';
     })
+    builder.addCase(deleteEmployee.fulfilled, (state, action) => {
+      const index = state.employees.findIndex(
+        ({id}) => id === action.payload
+      );
+      state.employees.splice(index, 1);
+    })
   }
 });
 
+// console.log("employeeSlice:", employeeSlice);
 
-
-// export const { addEmployee, replaceEmployee } = employeeSlice.actions;
 export default employeeSlice.reducer;
-

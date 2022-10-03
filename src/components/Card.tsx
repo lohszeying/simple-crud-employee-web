@@ -1,4 +1,5 @@
-import React from "react";
+import React, { MouseEventHandler, useCallback, useEffect } from "react";
+import { deleteEmployee, fetchAllEmployees } from "../store/employee-slice";
 import { useAppDispatch } from "../store/hooks";
 
 import classes from "./Card.module.css";
@@ -7,9 +8,13 @@ const Card = (props: any) => {
   const dispatch = useAppDispatch();
   const {id, name, salary, department} = props.employee;
 
-  const deleteEmployeeHandler = () => {
-    
-  }
+  // https://stackoverflow.com/questions/45089866/specifying-onclick-event-type-with-typescript-and-react-konva
+  const deleteEmployeeHandler = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    dispatch(deleteEmployee(id));
+  };
+
+  // useEffect(() => {}, [dispatch]);
 
   return (
     <React.Fragment>
