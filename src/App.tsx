@@ -6,8 +6,6 @@ import Homepage from "./pages/Homepage";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useAppDispatch } from "./store/hooks";
-import { FetchEmployeesData } from "./store/employee-actions";
-import {replaceEmployee} from './store/employee-slice';
 import {fetchAllEmployees} from './store/employee-slice';
 
 function App() {
@@ -22,14 +20,7 @@ function App() {
 
 
   // dispatch(replaceEmployee(data));
-  useEffect(() => {
-    // fetch("http://localhost:3000/employee")
-    //   .then((res) => res.json())
-    //   .then((data) => {
-        // dispatch(replaceEmployee(data));
-      // });
-      dispatch(fetchAllEmployees());
-  }, [dispatch]);
+  
 
   return (
     <div>

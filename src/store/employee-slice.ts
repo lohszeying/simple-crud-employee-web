@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from ".";
+import axios from "axios";
 import { Employee } from "../model/employee";
-import store from "./employee-slice";
 
 // https://redux.js.org/usage/usage-with-typescript
 // fetchUserById
@@ -12,28 +11,37 @@ import store from "./employee-slice";
 export const fetchAllEmployees = createAsyncThunk(
   'employees/fetch',
   // Declare the type your function argument here:
-  async () => {
-    const response = await fetch(`http://localhost:3000/employee`);
-    // Inferred return type: Promise<MyData>
-    return (await response.json()) as Employee;
+  async (payload, thunkApi) => {
+    const response = await axios.get(`http://localhost:3000/employee`);
+
+    return response.data.employees as Employee[];
   }
 );
 
+export const deleteEmployee = createAsyncThunk(
+  'employees/delete',
+  // Declare the type your function argument here:
+  async (payload, thunkApi) => {
+    const response = await axios.delete(`http://localhost:3000/employee/${payload}`);
+
+    return response.data.employees as Employee[];
+  }
+);
+
+
+interface EmployeeState {
+  employees: Employee[]
+  status: string
+}
+const initialState: EmployeeState = {
+  employees: [],
+  status: ''
+};
+
 const employeeSlice = createSlice({
   name: "employee",
-  initialState: { 
-    employees: [] as Employee[],
-    status: '' as String },
-  reducers: {
-    addEmployee: (state, action: PayloadAction<Employee>) => {
-      state.employees.push(action.payload);
-    },
-    replaceEmployee: (state, action: PayloadAction<Employee[]>) => {
-      let str = JSON.stringify(action.payload);
-      console.log(str);
-      state.employees = action.payload;
-    },
-  },
+  initialState:initialState,
+  reducers: {},
   extraReducers: builder => {
     // pending
     // rejected
@@ -41,7 +49,7 @@ const employeeSlice = createSlice({
       state.status = 'pending';
     })
     builder.addCase(fetchAllEmployees.fulfilled, (state, action) => {
-      state.employees.push(action.payload);
+      state.employees = action.payload;
     })
     builder.addCase(fetchAllEmployees.rejected, (state, action) => {
       state.status = 'rejected';
@@ -51,6 +59,6 @@ const employeeSlice = createSlice({
 
 
 
-export const { addEmployee, replaceEmployee } = employeeSlice.actions;
+// export const { addEmployee, replaceEmployee } = employeeSlice.actions;
 export default employeeSlice.reducer;
 
