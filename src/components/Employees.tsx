@@ -3,7 +3,6 @@ import Card from "./Card";
 import classes from "./Employees.module.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { Employee } from "../model/employee";
 import { fetchAllEmployees } from "../store/employee-slice";
 import { useAppDispatch } from "../store/hooks";
 
