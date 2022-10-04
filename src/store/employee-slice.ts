@@ -23,7 +23,7 @@ export const deleteEmployee = createAsyncThunk(
   // Declare the type your function argument here:
   async (payload: number, thunkApi) => {
     try {
-      const response = await axios.delete(`http://localhost:3000/employee/${payload}`);
+      await axios.delete(`http://localhost:3000/employee/${payload}`);
 
       return payload as number;
     } catch (e) {
