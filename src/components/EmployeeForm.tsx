@@ -1,5 +1,8 @@
-import React, { Fragment, MutableRefObject, useRef } from "react";
+import React, { Fragment, MutableRefObject, useEffect, useRef } from "react";
+import { useHistory } from "react-router-dom";
 import { RefactorActionInfo } from "typescript";
+import { addEmployee } from "../store/employee-slice";
+import { useAppDispatch } from "../store/hooks";
 import classes from "./EmployeeForm.module.css";
 
 const EmployeeForm = (props: any) => {
@@ -7,17 +10,25 @@ const EmployeeForm = (props: any) => {
   const nameInputRef = useRef() as MutableRefObject<HTMLInputElement>;
   const salaryInputRef = useRef() as MutableRefObject<HTMLInputElement>;
   const departmentInputRef = useRef() as MutableRefObject<HTMLSelectElement>;
+  const dispatch = useAppDispatch();
+  const history = useHistory();
 
   const  submitFormHandler = (event: React.FormEvent) => {
     event.preventDefault();
     
     const enteredName = nameInputRef.current.value;
-    const enteredSalary = salaryInputRef.current.value;
+    const enteredSalary = Number(salaryInputRef.current.value);
     const enteredDepartment = departmentInputRef.current.value;
 
     // optional: Could validate here
 
     // props.onAddQuote({ author: enteredAuthor, text: enteredText });
+    
+  
+    
+    dispatch(addEmployee({name: enteredName, salary: enteredSalary, department: enteredDepartment}));
+
+    history.push('/');
   }
 
   const finishEnteringHandler = () => {

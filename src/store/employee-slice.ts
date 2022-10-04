@@ -32,6 +32,22 @@ export const deleteEmployee = createAsyncThunk(
   }
 );
 
+export const addEmployee = createAsyncThunk(
+  'employees/add',
+  // Declare the type your function argument here:
+  async (payload: {name: string, salary: number, department: string}, thunkApi) => {
+    try {
+      await axios.post(`http://localhost:3000/employee`, {
+        name: payload.name,
+        salary: payload.salary,
+        department: payload.department
+      });
+    } catch (e) {
+      return thunkApi.rejectWithValue(e);
+    }
+  }
+);
+
 interface EmployeeState {
   employees: Employee[]
   status: string
@@ -62,6 +78,9 @@ const employeeSlice = createSlice({
         ({id}) => id === action.payload
       );
       state.employees.splice(index, 1);
+    })
+    builder.addCase(addEmployee.fulfilled, (state, action) => {
+      // state.employees.push(action.payload);
     })
   }
 });
