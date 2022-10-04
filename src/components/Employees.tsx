@@ -11,7 +11,7 @@ const Employees = () => {
   
   useEffect(() => {
     dispatch(fetchAllEmployees());
-  }, []);
+  });
 
   const employees = useSelector((state: RootState) => state.employee.employees);
   return (
