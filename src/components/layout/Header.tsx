@@ -13,7 +13,7 @@ const Header = (props: any) => {
       <nav className={classes.nav}>
         <ul>
           <li>
-            <NavLink to="/newemployee" activeClassName={classes.active}>
+            <NavLink to="/create" activeClassName={classes.active}>
               Add Employee
             </NavLink>
           </li>

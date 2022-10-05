@@ -1,5 +1,6 @@
 import { bindActionCreators, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Department } from "../model/department";
 import { Employee } from "../model/employee";
 
 // https://redux.js.org/usage/usage-with-typescript
@@ -15,6 +16,17 @@ export const fetchAllEmployees = createAsyncThunk(
     const response = await axios.get(`http://localhost:3000/employee`);
 
     return response.data.employees as Employee[];
+  }
+);
+
+export const fetchEmployeeById = createAsyncThunk(
+  'employees/fetchById',
+  // Declare the type your function argument here:
+  async (payload: number, thunkApi) => {
+
+    const response = await axios.get(`http://localhost:3000/employee/${payload}`);
+
+    return response.data as Employee;
   }
 );
 
@@ -48,13 +60,31 @@ export const addEmployee = createAsyncThunk(
   }
 );
 
+export const updateEmployee = createAsyncThunk(
+  'employees/update',
+  // Declare the type your function argument here:
+  async (payload: {id: number, name: string, salary: number, department: string}, thunkApi) => {
+    try {
+      await axios.put(`http://localhost:3000/employee/${payload.id}`, {
+        name: payload.name,
+        salary: payload.salary,
+        department: payload.department
+      });
+    } catch (e) {
+      return thunkApi.rejectWithValue(e);
+    }
+  }
+);
+
 interface EmployeeState {
   employees: Employee[]
-  status: string
+  status: string,
+  currentEmployee: Employee
 }
 const initialState: EmployeeState = {
   employees: [],
-  status: ''
+  status: '',
+  currentEmployee: {id: 0, name: '', salary: 0, department: Department.HR}
 };
 
 const employeeSlice = createSlice({
@@ -82,9 +112,13 @@ const employeeSlice = createSlice({
     builder.addCase(addEmployee.fulfilled, (state, action) => {
       // state.employees.push(action.payload);
     })
+    builder.addCase(fetchEmployeeById.fulfilled, (state, action) => {
+      state.currentEmployee = action.payload;
+    })
+    builder.addCase(updateEmployee.fulfilled, (state, action) => {
+      // state.employees.push(action.payload);
+    })
   }
 });
-
-// console.log("employeeSlice:", employeeSlice);
 
 export default employeeSlice.reducer;

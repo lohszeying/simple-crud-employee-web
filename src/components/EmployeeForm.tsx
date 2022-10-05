@@ -1,69 +1,150 @@
-import React, { Fragment, MutableRefObject, useEffect, useRef } from "react";
+import { current } from "@reduxjs/toolkit";
+import React, {
+  ChangeEventHandler,
+  Fragment,
+  MutableRefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { RefactorActionInfo } from "typescript";
-import { addEmployee } from "../store/employee-slice";
+import { setConstantValue } from "typescript";
+import { RootState } from "../store";
+import editSlice from "../store/edit-slice";
+import employeeSlice, {
+  addEmployee,
+  fetchEmployeeById,
+  updateEmployee,
+} from "../store/employee-slice";
 import { useAppDispatch } from "../store/hooks";
 import classes from "./EmployeeForm.module.css";
 
 const EmployeeForm = (props: any) => {
-  // const nameInputRef = useRef<HTMLInputElement>(null);
-  const nameInputRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const salaryInputRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const departmentInputRef = useRef() as MutableRefObject<HTMLSelectElement>;
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const editMode = useSelector((state: RootState) => state.edit.edit);
+  const getId = useSelector((state: RootState) => state.edit.idToEdit);
+  const [employeeDetails, setEmployeeDetails] = useState({
+    name: '',
+    salary: 0,
+    department: '',
+  });
+  const currentEmployee = useSelector(
+    (state: RootState) => state.employee.currentEmployee
+  );
 
-  const  submitFormHandler = (event: React.FormEvent) => {
-    event.preventDefault();
-    
-    const enteredName = nameInputRef.current.value;
-    const enteredSalary = Number(salaryInputRef.current.value);
-    const enteredDepartment = departmentInputRef.current.value;
+  useEffect(() => {
+    if (editMode) {
+      // Fetch current employee data
+      dispatch(fetchEmployeeById(getId));
+    }
+  }, []);
 
-    // optional: Could validate here
+  useEffect(() => {
+    if (editMode) {
+      setEmployeeDetails(state => ({...state, name: currentEmployee.name, salary: currentEmployee.salary, department: currentEmployee.department}));
+    } else {
+      // setEmployeeDetails(state => ({name: '', salary: 0, department: ''}));
+    }
+  }, [currentEmployee]);
 
-    // props.onAddQuote({ author: enteredAuthor, text: enteredText });
-    
+  useEffect(() => {
+
+    if (!editMode) {
+      setEmployeeDetails(state => ({name: '', salary: 0, department: ''}));
+    }
+  }, []);
   
-    
-    dispatch(addEmployee({name: enteredName, salary: enteredSalary, department: enteredDepartment}));
-
-    history.push('/');
-  }
-
-  const finishEnteringHandler = () => {
-    // setIsEntering(true);
+  // https://stackoverflow.com/questions/62465008/how-to-make-an-editable-prefixed-value-in-a-react-input-box
+  const updateHandler = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    setEmployeeDetails({
+      ...employeeDetails,
+      [event.target.name]: event.target.value,
+    });
   };
+
+  const submitFormHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const enteredName = employeeDetails.name;
+    const enteredSalary = Number(employeeDetails.salary);
+    const enteredDepartment = employeeDetails.department;
+
+    if (editMode) {
+      dispatch(
+        updateEmployee({
+          id: getId,
+          name: enteredName,
+          salary: enteredSalary,
+          department: enteredDepartment,
+        })
+      );
+    } else {
+      dispatch(
+        addEmployee({
+          name: enteredName,
+          salary: enteredSalary,
+          department: enteredDepartment,
+        })
+      );
+    }
+
+    history.push("/");
+  };
+
+  // https://stackoverflow.com/questions/71201613/how-to-create-editable-form-inputs-with-existing-prefill-data-in-react
 
   return (
     <Fragment>
-      <form
-        className={classes.form}
-        onSubmit={submitFormHandler}
-      >
+      <form className={classes.form} onSubmit={submitFormHandler}>
         <div className={classes.control}>
           <label htmlFor="name">Name</label>
           {/* https://stackoverflow.com/questions/69157200/minlength-doesnt-work-in-typescript-react */}
-          <input type="text" id="name" minLength={4} maxLength={30} required={true} ref={nameInputRef} placeholder="John Doe" />
+          <input
+            type="text"
+            name="name"
+            minLength={4}
+            maxLength={30}
+            required={true}
+            placeholder="John Doe"
+            onChange={updateHandler}
+            value={employeeDetails.name}
+          />
         </div>
 
         <div className={classes.control}>
           <label htmlFor="salary">Salary</label>
-          <input type="number" id="number" min="0" required={true} ref={salaryInputRef} placeholder="2500" />
+          <input
+            type="number"
+            name="salary"
+            min="0"
+            required={true}
+            placeholder="2500"
+            onChange={updateHandler}
+            value={employeeDetails.salary}
+          />
         </div>
 
         {/* Department should be dropdown */}
         <div className={classes.control}>
           <label htmlFor="name">Department</label>
-          <select id="department" ref={departmentInputRef} required={true} >
+          <select
+            name="department"
+            id="department"
+            // ref={departmentInputRef}
+            required={true}
+            value={employeeDetails.department}
+            onChange={updateHandler}
+          >
             <option value="HR">HR</option>
             <option value="PS">PS</option>
           </select>
         </div>
 
         <div className={classes.actions}>
-          <button onClick={finishEnteringHandler} className="btn">
-            Add Employee
+          <button className="btn">
+            {editMode ? "Update" : "Add"}
           </button>
         </div>
       </form>
