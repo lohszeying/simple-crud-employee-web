@@ -2,7 +2,23 @@ import { NavLink } from "react-router-dom";
 
 import classes from "./Header.module.css";
 
+import { useAppDispatch } from "../../store/hooks";
+import editSlice from '../../store/edit-slice';
+
+import { useHistory } from "react-router-dom";
+
 const Header = (props: any) => {
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+
+  const createEmployeePageHandler = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    dispatch(editSlice.actions.editState(false));
+
+    history.push('/create');
+  }
+
   return (
     <header className={classes.header}>
       <div className={classes.logo}>
@@ -13,13 +29,10 @@ const Header = (props: any) => {
       <nav className={classes.nav}>
         <ul>
           <li>
-            <NavLink to="/create" activeClassName={classes.active}>
+            <NavLink to="/create" activeClassName={classes.active} onClick={createEmployeePageHandler}>
               Add Employee
             </NavLink>
           </li>
-          {/* <li>
-          <NavLink to='/new-quote' activeClassName={classes.active}>Add a Quote</NavLink>
-        </li> */}
         </ul>
       </nav>
     </header>

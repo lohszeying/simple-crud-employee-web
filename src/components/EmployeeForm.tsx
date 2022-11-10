@@ -28,7 +28,7 @@ const EmployeeForm = (props: any) => {
   const [employeeDetails, setEmployeeDetails] = useState({
     name: '',
     salary: 0,
-    department: '',
+    department: 'HR',
   });
   const currentEmployee = useSelector(
     (state: RootState) => state.employee.currentEmployee
@@ -38,23 +38,14 @@ const EmployeeForm = (props: any) => {
     if (editMode) {
       // Fetch current employee data
       dispatch(fetchEmployeeById(getId));
-    }
+    } 
   }, []);
 
   useEffect(() => {
     if (editMode) {
       setEmployeeDetails(state => ({...state, name: currentEmployee.name, salary: currentEmployee.salary, department: currentEmployee.department}));
-    } else {
-      // setEmployeeDetails(state => ({name: '', salary: 0, department: ''}));
     }
   }, [currentEmployee]);
-
-  useEffect(() => {
-
-    if (!editMode) {
-      setEmployeeDetails(state => ({name: '', salary: 0, department: ''}));
-    }
-  }, []);
   
   // https://stackoverflow.com/questions/62465008/how-to-make-an-editable-prefixed-value-in-a-react-input-box
   const updateHandler = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
@@ -80,6 +71,7 @@ const EmployeeForm = (props: any) => {
           department: enteredDepartment,
         })
       );
+
     } else {
       dispatch(
         addEmployee({
