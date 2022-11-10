@@ -5,19 +5,25 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { fetchAllEmployees } from "../store/employee-slice";
 import { useAppDispatch } from "../store/hooks";
+import Pagination from "./Pagination";
 
 const Employees = () => {
   const dispatch = useAppDispatch();
+  const getPageNumber = useSelector((state: RootState) => state.page.page);
   
   useEffect(() => {
     dispatch(fetchAllEmployees());
   });
 
+  useEffect(() => {
+    
+  }, [getPageNumber]);
+
   const employees = useSelector((state: RootState) => state.employee.employees);
   return (
     <React.Fragment>
       <div className={classes["employees-body"]}>
-      {employees.map((employee) => (
+      {employees.slice((getPageNumber-1) * 10, 10*getPageNumber).map((employee) => (
           <Card
             key={employee.id}
             employee={{
@@ -30,6 +36,7 @@ const Employees = () => {
         ))}
       </div>
       
+      <Pagination />
     </React.Fragment>
   );
 };
