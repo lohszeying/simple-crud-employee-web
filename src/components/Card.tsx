@@ -82,8 +82,8 @@ const Card = (props: any) => {
             contentLabel="Example Modal"
           >
             <h2>Are you sure you want to delete?</h2>
-            <button onClick={closeModal}>Cancel</button>
-            <button onClick={deleteEmployeeHandler}>Delete</button>
+            <Button variant="text" onClick={closeModal}>Cancel</Button>
+            <Button onClick={deleteEmployeeHandler}>Delete</Button>
           </Modal>
         </div>
       </div>
