@@ -13,7 +13,7 @@ const Employees = () => {
   
   useEffect(() => {
     dispatch(fetchAllEmployees());
-  });
+  }, []);
 
   useEffect(() => {
     

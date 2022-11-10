@@ -12,10 +12,16 @@ const Pagination = () => {
   const dispatch = useAppDispatch();
   const getPageNumber = useSelector((state: RootState) => state.page.page);
   const employees = useSelector((state: RootState) => state.employee.employees);
+
   const [page, setPage] = useState(1);
 
   const [isPreviousPageDisabled, setPreviousPageDisabled] = useState(false);
   const [isNextPageDisabled, setNextPageDisabled] = useState(false);
+  let maxPage = Math.ceil(employees.length/10);
+
+  useEffect(() => {
+    maxPage = Math.ceil(employees.length/10);
+  }, [employees]);
 
   useEffect(() => {
     setPage(getPageNumber);
@@ -25,15 +31,13 @@ const Pagination = () => {
       setPreviousPageDisabled(true);
     }
 
-    const maxPage = Math.ceil(employees.length/10);
-
     // Check max page
     if (getPageNumber >= maxPage) {
       setNextPageDisabled(true);
     } else {
       setNextPageDisabled(false);
     }
-  }, [getPageNumber]);
+  }, [getPageNumber, maxPage]);
 
   const previousPageHandler = () => {
     if (getPageNumber > 1) {
