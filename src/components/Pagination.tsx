@@ -46,11 +46,16 @@ const Pagination = () => {
     dispatch(pageSlice.actions.setPage(getPageNumber + 1));
   }
 
+  const getEndNumber: number = isNextPageDisabled ? employees.length : getPageNumber * 10;
+
   return (<Fragment>
     <div className={classes["button-row"]}>
-      <Button color="primary" variant="text" disabled={isPreviousPageDisabled ? true : false} onClick={previousPageHandler}>Previous</Button>
-      <h4 className={classes.page}>{page}</h4>
-      <Button variant="text" disabled={isNextPageDisabled ? true : false} onClick={nextPageHandler}>Next</Button>
+      <p className={classes.showing}>Showing {(getPageNumber*10)-9}-{getEndNumber} out of {employees.length} entries</p>
+      <div className={classes["page-buttons"]}>
+        <Button color="primary" variant="text" disabled={isPreviousPageDisabled ? true : false} onClick={previousPageHandler}>Previous</Button>
+        <h4 className={classes.page}>{page}</h4>
+        <Button variant="text" disabled={isNextPageDisabled ? true : false} onClick={nextPageHandler}>Next</Button>
+      </div>
     </div>
   </Fragment>);
 };
