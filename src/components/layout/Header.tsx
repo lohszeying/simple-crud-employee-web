@@ -7,6 +7,9 @@ import editSlice from '../../store/edit-slice';
 
 import { useHistory } from "react-router-dom";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Header = (props: any) => {
   const dispatch = useAppDispatch();
   const history = useHistory();

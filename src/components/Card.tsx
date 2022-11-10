@@ -17,7 +17,7 @@ const Card = (props: any) => {
     // Maybe pass in the ID into EmployeeForm?
     dispatch(editSlice.actions.setIdToEdit(id));
     dispatch(editSlice.actions.editState(true));
-
+    
     history.push('/edit');
   };
 

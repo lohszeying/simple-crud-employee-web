@@ -9,7 +9,9 @@ import React, {
 } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import { setConstantValue } from "typescript";
+import { Status } from "../model/status";
 import { RootState } from "../store";
 import editSlice from "../store/edit-slice";
 import employeeSlice, {
@@ -19,16 +21,20 @@ import employeeSlice, {
 } from "../store/employee-slice";
 import { useAppDispatch } from "../store/hooks";
 import classes from "./EmployeeForm.module.css";
+import { Department } from "../model/department";
 
 const EmployeeForm = (props: any) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const editMode = useSelector((state: RootState) => state.edit.edit);
   const getId = useSelector((state: RootState) => state.edit.idToEdit);
+  const getStatus = useSelector((state: RootState) => state.employee.status);
+  const getErrorMsg = useSelector((state: RootState) => state.employee.errorMsg);
+
   const [employeeDetails, setEmployeeDetails] = useState({
     name: '',
     salary: 0,
-    department: 'HR',
+    department: Department.HR,
   });
   const currentEmployee = useSelector(
     (state: RootState) => state.employee.currentEmployee
@@ -46,6 +52,16 @@ const EmployeeForm = (props: any) => {
       setEmployeeDetails(state => ({...state, name: currentEmployee.name, salary: currentEmployee.salary, department: currentEmployee.department}));
     }
   }, [currentEmployee]);
+
+  useEffect(() => {
+    if (getStatus === Status.FULFILLED) {
+      history.push("/");
+      toast("Success!")
+    } else if (getStatus === Status.REJECTED) {
+      console.log("rejected");
+      toast(getStatus + ': ' + getErrorMsg);
+    }
+  }, [getStatus]);
   
   // https://stackoverflow.com/questions/62465008/how-to-make-an-editable-prefixed-value-in-a-react-input-box
   const updateHandler = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
@@ -81,8 +97,6 @@ const EmployeeForm = (props: any) => {
         })
       );
     }
-
-    history.push("/");
   };
 
   // https://stackoverflow.com/questions/71201613/how-to-create-editable-form-inputs-with-existing-prefill-data-in-react
@@ -138,6 +152,7 @@ const EmployeeForm = (props: any) => {
           <button className="btn">
             {editMode ? "Update" : "Add"}
           </button>
+          
         </div>
       </form>
     </Fragment>
