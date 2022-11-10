@@ -9,10 +9,20 @@ import { useHistory } from "react-router-dom";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import pageSlice from "../../store/page-slice";
 
 const Header = (props: any) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
+
+  const homepageHandler = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    dispatch(pageSlice.actions.setPage(1));
+
+    history.push('/');
+  }
 
   const createEmployeePageHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -25,7 +35,7 @@ const Header = (props: any) => {
   return (
     <header className={classes.header}>
       <div className={classes.logo}>
-        <NavLink to="/" activeClassName={classes.active}>
+        <NavLink to="/" activeClassName={classes.active} onClick={homepageHandler}>
           Employees
         </NavLink>
       </div>

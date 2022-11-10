@@ -8,6 +8,10 @@ import { useHistory } from "react-router-dom";
 
 import Modal from "react-modal";
 
+import { Button } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 const customStyles = {
   content: {
     top: "50%",
@@ -68,8 +72,8 @@ const Card = (props: any) => {
           </div>
         </div>
         <div className={classes["button-group"]}>
-          <button onClick={editEmployeeHandler}>Edit</button>
-          <button onClick={openModal}>Delete</button>
+          <Button startIcon={<EditIcon />} onClick={editEmployeeHandler}></Button>
+          <Button color="error" startIcon={<DeleteIcon />} onClick={openModal}></Button>
           <Modal
             isOpen={modalIsOpen}
             onAfterOpen={afterOpenModal}

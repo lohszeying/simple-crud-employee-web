@@ -6,6 +6,8 @@ import { RootState } from "../store";
 import { useAppDispatch } from "../store/hooks";
 import pageSlice from "../store/page-slice";
 
+import { Button } from "@mui/material";
+
 const Pagination = () => {
   const dispatch = useAppDispatch();
   const getPageNumber = useSelector((state: RootState) => state.page.page);
@@ -46,9 +48,9 @@ const Pagination = () => {
 
   return (<Fragment>
     <div className={classes["button-row"]}>
-      <button disabled={isPreviousPageDisabled ? true : false} onClick={previousPageHandler}>Previous</button>
-      <button>{page}</button>
-      <button disabled={isNextPageDisabled ? true : false} onClick={nextPageHandler}>Next</button>
+      <Button color="primary" variant="text" disabled={isPreviousPageDisabled ? true : false} onClick={previousPageHandler}>Previous</Button>
+      <h4 className={classes.page}>{page}</h4>
+      <Button variant="text" disabled={isNextPageDisabled ? true : false} onClick={nextPageHandler}>Next</Button>
     </div>
   </Fragment>);
 };

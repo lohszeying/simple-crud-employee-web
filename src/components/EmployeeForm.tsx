@@ -23,6 +23,8 @@ import { useAppDispatch } from "../store/hooks";
 import classes from "./EmployeeForm.module.css";
 import { Department } from "../model/department";
 
+import { Button } from "@mui/material";
+
 const EmployeeForm = (props: any) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -58,7 +60,6 @@ const EmployeeForm = (props: any) => {
       history.push("/");
       toast("Success!")
     } else if (getStatus === Status.REJECTED) {
-      console.log("rejected");
       toast(getStatus + ': ' + getErrorMsg);
     }
   }, [getStatus]);
