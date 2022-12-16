@@ -33,6 +33,8 @@ const EmployeeForm = (props: any) => {
   const getStatus = useSelector((state: RootState) => state.employee.status);
   const getErrorMsg = useSelector((state: RootState) => state.employee.errorMsg);
 
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+
   const [employeeDetails, setEmployeeDetails] = useState({
     name: '',
     salary: 0,
@@ -100,10 +102,17 @@ const EmployeeForm = (props: any) => {
     }
   };
 
+  const displayPleaseLoginMsg = () => {
+    return (
+      <h2 className={classes["please-login"]}>Please login.</h2>
+    );
+  }
+
   // https://stackoverflow.com/questions/71201613/how-to-create-editable-form-inputs-with-existing-prefill-data-in-react
 
   return (
     <Fragment>
+      {isLoggedIn ? 
       <form className={classes.form} onSubmit={submitFormHandler}>
         <div className={classes.control}>
           <label htmlFor="name">Name</label>
@@ -155,7 +164,7 @@ const EmployeeForm = (props: any) => {
           </button>
           
         </div>
-      </form>
+      </form> : displayPleaseLoginMsg()}
     </Fragment>
   );
 };

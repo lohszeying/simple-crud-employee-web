@@ -17,7 +17,7 @@ export const fetchAllEmployees = createAsyncThunk(
   // Declare the type your function argument here:
   async (payload, thunkApi) => {
     const response = await axios.get(`http://localhost:3000/employee`);
-    console.log(response)
+    // console.log(response)
 
     return response.data.employees as Employee[];
   }

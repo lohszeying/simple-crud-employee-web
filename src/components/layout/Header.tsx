@@ -11,10 +11,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React from "react";
 import pageSlice from "../../store/page-slice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import userSlice from "../../store/user-slice";
 
 const Header = (props: any) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
+
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
 
   const homepageHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -32,13 +37,17 @@ const Header = (props: any) => {
     history.push('/create');
   }
 
-  return (
-    <header className={classes.header}>
-      <div className={classes.logo}>
-        <NavLink to="/" activeClassName={classes.active} onClick={homepageHandler}>
-          Employees
-        </NavLink>
-      </div>
+  const logoutUser = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    dispatch(userSlice.actions.editIsLoggedIn(false));
+
+    history.push('/');
+  }
+
+  const checkIfLoggedIn = () => {
+    if (isLoggedIn) {
+      return (
       <nav className={classes.nav}>
         <ul>
           <li>
@@ -46,8 +55,53 @@ const Header = (props: any) => {
               Add Employee
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/logout" activeClassName={classes.active} onClick={logoutUser} >
+              Logout
+            </NavLink>
+          </li>
         </ul>
       </nav>
+      );
+    } else {
+      return (
+        <nav className={classes.nav}>
+        <ul>
+          <li>
+            <NavLink to="/register" activeClassName={classes.active}>
+              Register
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/login" activeClassName={classes.active}>
+              Login
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+      );
+    }
+  }
+
+  return (
+    <header className={classes.header}>
+      <div className={classes.logo}>
+        <NavLink to="/" activeClassName={classes.active} onClick={homepageHandler}>
+          Employees
+        </NavLink>
+      </div>
+      {/* {isLoggedIn ? <nav className={classes.nav}>
+        <ul>
+          <li>
+            <NavLink to="/create" activeClassName={classes.active} onClick={createEmployeePageHandler}>
+              Add Employee
+            </NavLink>
+          </li>
+        </ul>
+      </nav> : null} */}
+
+      {checkIfLoggedIn()}
+      
     </header>
   );
 };

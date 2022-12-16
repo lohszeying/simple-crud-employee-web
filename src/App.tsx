@@ -3,7 +3,9 @@ import "./App.css";
 import Header from "./components/layout/Header";
 import EditEmployee from "./pages/EditEmployee";
 import Homepage from "./pages/Homepage";
+import Login from "./pages/Login";
 import NewEmployee from "./pages/NewEmployee";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -18,6 +20,12 @@ function App() {
         </Route>
         <Route path="/edit" >
           <EditEmployee />
+        </Route>
+        <Route path="/register" >
+          <Register />
+        </Route>
+        <Route path="/login" >
+          <Login />
         </Route>
       </Switch>
     </div>
