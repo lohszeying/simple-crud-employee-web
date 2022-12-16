@@ -6,7 +6,7 @@ import { Department } from "../model/department";
 export const createUser = createAsyncThunk(
   'user/add',
   // Declare the type your function argument here:
-  async (payload: {username: string, password: string, department: Department}, thunkApi) => {
+  async (payload: {username: string, password: string, department: string}, thunkApi) => {
     try {
       await axios.post(`http://localhost:3000/user`, {
         username: payload.username,

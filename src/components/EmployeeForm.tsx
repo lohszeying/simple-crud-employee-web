@@ -24,6 +24,7 @@ import classes from "./EmployeeForm.module.css";
 import { Department } from "../model/department";
 
 import { Button } from "@mui/material";
+import { getDepartments } from "../store/department-slice";
 
 const EmployeeForm = (props: any) => {
   const dispatch = useAppDispatch();
@@ -35,10 +36,16 @@ const EmployeeForm = (props: any) => {
 
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
 
+  useEffect(() => {
+    dispatch(getDepartments());
+  }, []);
+
+  const departments: string[] = useSelector((state: RootState) => state.department.department);
+
   const [employeeDetails, setEmployeeDetails] = useState({
     name: '',
     salary: 0,
-    department: Department.HR,
+    department: "",
   });
   const currentEmployee = useSelector(
     (state: RootState) => state.employee.currentEmployee
@@ -153,8 +160,11 @@ const EmployeeForm = (props: any) => {
             value={employeeDetails.department}
             onChange={updateHandler}
           >
-            <option value="HR">HR</option>
-            <option value="PS">PS</option>
+            {/* <option value="HR">HR</option>
+            <option value="PS">PS</option> */}
+            {departments.map((result) => 
+              <option key={result} value={result}>{result}</option>
+            )}
           </select>
         </div>
 

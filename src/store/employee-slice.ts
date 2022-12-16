@@ -90,7 +90,7 @@ const initialState: EmployeeState = {
   employees: [],
   status: Status.PENDING,
   errorMsg: '',
-  currentEmployee: {id: 0, name: '', salary: 0, department: Department.HR}
+  currentEmployee: {id: 0, name: '', salary: 0, department: ""}
 };
 
 const employeeSlice = createSlice({

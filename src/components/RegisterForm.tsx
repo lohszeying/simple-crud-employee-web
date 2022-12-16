@@ -15,15 +15,27 @@ import { Department } from "../model/department";
 import { ReactNode } from "react";
 import classes from "./RegisterForm.module.css";
 import userSlice, {createUser} from "../store/user-slice";
+import { useEffect } from "react";
+
+import departmentSlice, {getDepartments} from "../store/department-slice";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+
 
 const RegisterForm = (props: any) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
+  useEffect(() => {
+    dispatch(getDepartments());
+  }, []);
+
+  const departments: string[] = useSelector((state: RootState) => state.department.department);
+
   const [userDetails, setUserDetails] = useState({
     username: "",
     password: "",
-    department: Department.HR,
+    department: "",
   });
 
   // https://stackoverflow.com/questions/58675993/typescript-react-select-onchange-handler-type-error
@@ -44,7 +56,7 @@ const RegisterForm = (props: any) => {
   ) => {
     setUserDetails({
       ...userDetails,
-      department: event.target.value as Department,
+      department: event.target.value as string,
     });
   };
 
@@ -52,9 +64,7 @@ const RegisterForm = (props: any) => {
     event.preventDefault();
 
     dispatch(createUser(userDetails));
-    // dispatch(userSlice.actions.editIsLoggedIn(true));
-
-
+    
     history.push('/');
   };
 
@@ -93,9 +103,12 @@ const RegisterForm = (props: any) => {
             value={userDetails.department}
             onChange={updateDepartmentHandler}
           >
-            <MenuItem value={"HR"}>HR</MenuItem>
-            <MenuItem value={"PS"}>PS</MenuItem>
-            <MenuItem value={"admin"}>admin</MenuItem>
+          {departments.map((result) => 
+            <MenuItem key={result} value={result}>{result}</MenuItem>
+          )}
+          {/* <MenuItem value={"HR"}>HR</MenuItem>
+          <MenuItem value={"PS"}>PS</MenuItem>
+          <MenuItem value={"admin"}>admin</MenuItem> */}
           </Select>
         </FormControl>
 

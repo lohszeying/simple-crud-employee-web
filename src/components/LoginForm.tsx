@@ -12,7 +12,6 @@ import {
   SelectChangeEvent,
   Typography
 } from "@mui/material";
-import { Department } from "../model/department";
 import { ReactNode } from "react";
 import classes from "./LoginForm.module.css";
 import userSlice, {loginUser} from "../store/user-slice";
@@ -25,7 +24,6 @@ const LoginForm = (props: any) => {
   const [userDetails, setUserDetails] = useState({
     username: "",
     password: "",
-    department: Department.HR,
   });
 
   // https://stackoverflow.com/questions/58675993/typescript-react-select-onchange-handler-type-error
