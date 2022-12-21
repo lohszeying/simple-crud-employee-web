@@ -3,13 +3,34 @@ import Employees from "../components/Employees";
 import { RootState } from "../store";
 import { useSelector } from "react-redux";
 import Login from './Login';
+import { useCookies } from "react-cookie";
+import { useEffect } from "react";
+import { useAppDispatch } from "../store/hooks";
+import userSlice from "../store/user-slice";
+import { checkLogin } from "../store/user-slice";
+
 
 const Homepage = () => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
+  const dispatch = useAppDispatch();
+
+  // If cookie exist, check expiration time
+  // dispatch(userSlice.actions.editIsLoggedIn(true));
+
+  useEffect(() => {
+    if (cookies.jwttoken) {
+      // check expiration time (send some kind of request?)
+      dispatch(checkLogin(cookies.jwttoken as string)).then((result) => {
+        dispatch(userSlice.actions.editIsLoggedIn(result.payload));
+      });
+    }
+  }, [cookies.jwttoken]);
+  
 
   return (<React.Fragment>
-    {isLoggedIn ? <Employees /> : <Login />}
     {/* <Employees /> */}
+    {isLoggedIn ? <Employees /> : <Login />}
   </React.Fragment>)
 };
 

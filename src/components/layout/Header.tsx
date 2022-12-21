@@ -14,12 +14,14 @@ import pageSlice from "../../store/page-slice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import userSlice from "../../store/user-slice";
+import { useCookies } from "react-cookie";
 
 const Header = (props: any) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
 
   const homepageHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -41,6 +43,9 @@ const Header = (props: any) => {
     e.preventDefault();
 
     dispatch(userSlice.actions.editIsLoggedIn(false));
+
+    // Remove cookie
+    removeCookie('jwttoken');
 
     history.push('/');
   }

@@ -16,10 +16,12 @@ import { ReactNode } from "react";
 import classes from "./LoginForm.module.css";
 import userSlice, {loginUser} from "../store/user-slice";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const LoginForm = (props: any) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
 
   const [userDetails, setUserDetails] = useState({
     username: "",
@@ -41,8 +43,13 @@ const LoginForm = (props: any) => {
   const submitFormHandler = (event: React.FormEvent) => {
     event.preventDefault();
 
-    dispatch(loginUser(userDetails));
+    dispatch(loginUser(userDetails)).then((result) => {
+      const jwttoken = result.payload as string;
+      removeCookie('jwttoken');
 
+      // Store in react cookie
+      setCookie("jwttoken", jwttoken);
+    });
 
     history.push('/');
   };

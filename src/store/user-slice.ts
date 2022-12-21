@@ -24,10 +24,34 @@ export const loginUser = createAsyncThunk(
   // Declare the type your function argument here:
   async (payload: {username: string, password: string}, thunkApi) => {
     try {
-      await axios.post(`http://localhost:3000/user/login`, {
+      const response = await axios.post(`http://localhost:3000/user/login`, {
         username: payload.username,
         password: payload.password,
       });
+
+      const jwttoken = response.data.jwttoken;
+      
+      return jwttoken as string;
+      
+    } catch (e) {
+      return thunkApi.rejectWithValue(e);
+    }
+  }
+);
+
+export const checkLogin = createAsyncThunk(
+  'user/login',
+  // Declare the type your function argument here:
+  async (payload: string, thunkApi) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/user/checklogin`, {
+        headers: {
+          jwttoken: "Bearer " + payload
+        }
+      });
+
+      return response.data.authorized as boolean;
+      
     } catch (e) {
       return thunkApi.rejectWithValue(e);
     }
@@ -40,6 +64,7 @@ interface UserState {
   password: string,
   status: Status,
   errorMsg: string,
+  token: string,
 }
 const initialState: UserState = {
   // false -> create mode
@@ -48,7 +73,8 @@ const initialState: UserState = {
   username: '',
   password: '',
   status: Status.PENDING,
-  errorMsg: ''
+  errorMsg: '',
+  token: ''
 };
 
 const userSlice = createSlice({
@@ -65,7 +91,7 @@ const userSlice = createSlice({
     })
     builder.addCase(createUser.fulfilled, (state, action) => {
       state.status = Status.FULFILLED;
-      state.isLoggedIn = true;
+      // state.isLoggedIn = true;
     })
     builder.addCase(createUser.rejected, (state, action: PayloadAction<any>) => {
       state.status = Status.REJECTED;
@@ -79,6 +105,7 @@ const userSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.status = Status.FULFILLED;
       state.isLoggedIn = true;
+      state.token = action.payload;
     })
     builder.addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
       state.status = Status.REJECTED;

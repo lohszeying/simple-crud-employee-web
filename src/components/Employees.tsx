@@ -6,14 +6,17 @@ import { RootState } from "../store";
 import { fetchAllEmployees } from "../store/employee-slice";
 import { useAppDispatch } from "../store/hooks";
 import Pagination from "./Pagination";
+import { useCookies } from "react-cookie";
 
 const Employees = () => {
   const dispatch = useAppDispatch();
   const getPageNumber = useSelector((state: RootState) => state.page.page);
+
+  const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
   
   useEffect(() => {
-    dispatch(fetchAllEmployees());
-  }, []);
+    dispatch(fetchAllEmployees(cookies.jwttoken as string));
+  }, [cookies.jwttoken]);
 
   useEffect(() => {
     

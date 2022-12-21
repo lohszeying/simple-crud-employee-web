@@ -5,6 +5,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { Department } from "../model/department";
 import { Employee } from "../model/employee";
 import { Status } from "../model/status";
+import { useCookies } from "react-cookie";
 
 // https://redux.js.org/usage/usage-with-typescript
 // fetchUserById
@@ -15,9 +16,12 @@ import { Status } from "../model/status";
 export const fetchAllEmployees = createAsyncThunk(
   'employees/fetch',
   // Declare the type your function argument here:
-  async (payload, thunkApi) => {
-    const response = await axios.get(`http://localhost:3000/employee`);
-    // console.log(response)
+  async (payload: string, thunkApi) => {
+    const response = await axios.get(`http://localhost:3000/employee`, {
+      headers: {
+        jwttoken: "Bearer " + payload
+      }
+    });
 
     return response.data.employees as Employee[];
   }
@@ -109,7 +113,10 @@ const employeeSlice = createSlice({
     })
     builder.addCase(fetchAllEmployees.rejected, (state, action: PayloadAction<any>) => {
       state.status = Status.REJECTED;
-      state.errorMsg = action.payload.response.data.errorMessage;
+      // console.log("action.payload in fetchAllEmployess rejected:", action.payload);
+      if (action.payload) {
+        state.errorMsg = action.payload.response.data.errorMessage;
+      }
     })
 
 
