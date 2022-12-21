@@ -45,7 +45,7 @@ const EmployeeForm = (props: any) => {
   const [employeeDetails, setEmployeeDetails] = useState({
     name: '',
     salary: 0,
-    department: "",
+    department: "HR",
   });
   const currentEmployee = useSelector(
     (state: RootState) => state.employee.currentEmployee

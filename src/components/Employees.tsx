@@ -11,11 +11,15 @@ import { useCookies } from "react-cookie";
 const Employees = () => {
   const dispatch = useAppDispatch();
   const getPageNumber = useSelector((state: RootState) => state.page.page);
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
 
   const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
   
   useEffect(() => {
-    dispatch(fetchAllEmployees(cookies.jwttoken as string));
+    if (cookies.jwttoken) {
+      console.log("change in cookies in Employees:", cookies.jwttoken)
+      dispatch(fetchAllEmployees(cookies.jwttoken as string));
+    }
   }, [cookies.jwttoken]);
 
   useEffect(() => {

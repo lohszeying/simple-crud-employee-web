@@ -35,7 +35,7 @@ const RegisterForm = (props: any) => {
   const [userDetails, setUserDetails] = useState({
     username: "",
     password: "",
-    department: "",
+    department: "HR",
   });
 
   // https://stackoverflow.com/questions/58675993/typescript-react-select-onchange-handler-type-error

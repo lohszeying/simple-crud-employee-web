@@ -16,12 +16,12 @@ const Homepage = () => {
   const dispatch = useAppDispatch();
 
   // If cookie exist, check expiration time
-  // dispatch(userSlice.actions.editIsLoggedIn(true));
 
   useEffect(() => {
     if (cookies.jwttoken) {
       // check expiration time (send some kind of request?)
       dispatch(checkLogin(cookies.jwttoken as string)).then((result) => {
+        console.log("change in cookies in homepage, result of isLoggedIn:", result)
         dispatch(userSlice.actions.editIsLoggedIn(result.payload));
       });
     }
