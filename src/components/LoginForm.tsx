@@ -76,7 +76,7 @@ const LoginForm = (props: any) => {
             onChange={updateHandler}
             type="password"
           />
-          <FormHelperText id="my-helper-text">Input username.</FormHelperText>
+          <FormHelperText id="my-helper-text">Input password.</FormHelperText>
         </FormControl>
 
         <Button variant="contained" onClick={submitFormHandler}>

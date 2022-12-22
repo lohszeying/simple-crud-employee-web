@@ -7,24 +7,33 @@ import { fetchAllEmployees } from "../store/employee-slice";
 import { useAppDispatch } from "../store/hooks";
 import Pagination from "./Pagination";
 import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
+import { Status } from "../model/status";
 
 const Employees = () => {
   const dispatch = useAppDispatch();
   const getPageNumber = useSelector((state: RootState) => state.page.page);
-  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
 
   const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
+
+  const getStatus = useSelector((state: RootState) => state.employee.status);
+  const getErrorMsg = useSelector((state: RootState) => state.employee.errorMsg);
   
   useEffect(() => {
     if (cookies.jwttoken) {
-      console.log("change in cookies in Employees:", cookies.jwttoken)
       dispatch(fetchAllEmployees(cookies.jwttoken as string));
     }
-  }, [cookies.jwttoken]);
+  }, [cookies.jwttoken, dispatch]);
 
   useEffect(() => {
-    
   }, [getPageNumber]);
+
+  useEffect(() => {
+    if (getStatus === Status.REJECTED) {
+      toast("Rejected: " + getErrorMsg);
+      console.log("rejecting")
+    }
+  }, [getStatus, getErrorMsg]);
 
   const employees = useSelector((state: RootState) => state.employee.employees);
   return (

@@ -10,18 +10,23 @@ import { useEffect } from "react";
 import userSlice from "../store/user-slice";
 import { checkLogin } from "../store/user-slice";
 import { useCookies } from "react-cookie";
-
+import classes from "./Login.module.css";
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
 
   useEffect(() => {
-    console.log("isLoggedIn:", isLoggedIn);
-  }, [isLoggedIn])
+    if (cookies.jwttoken) {
+      dispatch(checkLogin(cookies.jwttoken as string)).then((result) => {
+        dispatch(userSlice.actions.editIsLoggedIn(result.payload));
+      });
+    }
+  });
 
   return (<React.Fragment>
-    {isLoggedIn ? "Already logged in" : <LoginForm />}
+    {isLoggedIn ? <h2 className={classes["logged-in-msg"]}>Already logged in</h2> : <LoginForm />}
     
   </React.Fragment>)
 };

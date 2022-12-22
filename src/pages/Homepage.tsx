@@ -21,15 +21,13 @@ const Homepage = () => {
     if (cookies.jwttoken) {
       // check expiration time (send some kind of request?)
       dispatch(checkLogin(cookies.jwttoken as string)).then((result) => {
-        console.log("change in cookies in homepage, result of isLoggedIn:", result)
         dispatch(userSlice.actions.editIsLoggedIn(result.payload));
       });
     }
-  }, [cookies.jwttoken]);
+  });
   
 
   return (<React.Fragment>
-    {/* <Employees /> */}
     {isLoggedIn ? <Employees /> : <Login />}
   </React.Fragment>)
 };

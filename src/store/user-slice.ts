@@ -82,7 +82,6 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     editIsLoggedIn(state, action) {
-      console.log("editing!!, action.payload:", action.payload);
       state.isLoggedIn = action.payload;
     }
   },
