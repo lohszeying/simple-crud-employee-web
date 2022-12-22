@@ -40,7 +40,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const checkLogin = createAsyncThunk(
-  'user/login',
+  'user/checklogin',
   // Declare the type your function argument here:
   async (payload: string, thunkApi) => {
     try {
@@ -100,10 +100,11 @@ const userSlice = createSlice({
 
     builder.addCase(loginUser.pending, (state, action) => {
       state.status = Status.PENDING;
+      console.log("loginUser pending");
     })
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.status = Status.FULFILLED;
-      // state.isLoggedIn = true;
+      console.log("loginUser success");
     })
     builder.addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
       state.status = Status.REJECTED;

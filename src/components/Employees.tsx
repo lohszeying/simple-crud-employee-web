@@ -31,7 +31,6 @@ const Employees = () => {
   useEffect(() => {
     if (getStatus === Status.REJECTED) {
       toast("Rejected: " + getErrorMsg);
-      console.log("rejecting")
     }
   }, [getStatus, getErrorMsg]);
 

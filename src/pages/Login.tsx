@@ -23,7 +23,7 @@ const Login = () => {
         dispatch(userSlice.actions.editIsLoggedIn(result.payload));
       });
     }
-  });
+  }, [cookies.jwttoken]);
 
   return (<React.Fragment>
     {isLoggedIn ? <h2 className={classes["logged-in-msg"]}>Already logged in</h2> : <LoginForm />}

@@ -8,24 +8,24 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../store/hooks";
 import userSlice from "../store/user-slice";
 import { checkLogin } from "../store/user-slice";
+import {toast} from 'react-toastify'
+import { Status } from "../model/status";
 
 
 const Homepage = () => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-  const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
-  const dispatch = useAppDispatch();
 
-  // If cookie exist, check expiration time
+  const getStatus = useSelector((state: RootState) => state.user.status);
+  const getErrorMsg = useSelector((state: RootState) => state.user.errorMsg);
 
   useEffect(() => {
-    if (cookies.jwttoken) {
-      // check expiration time (send some kind of request?)
-      dispatch(checkLogin(cookies.jwttoken as string)).then((result) => {
-        dispatch(userSlice.actions.editIsLoggedIn(result.payload));
-      });
+    if (getStatus === Status.FULFILLED) {
+      toast("Success!")
+    } else if (getStatus === Status.REJECTED) {
+      toast(getStatus + ': ' + getErrorMsg);
     }
-  });
-  
+    console.log("getStatus:", getStatus);
+  }, [getStatus]);
 
   return (<React.Fragment>
     {isLoggedIn ? <Employees /> : <Login />}
