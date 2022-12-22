@@ -21,10 +21,16 @@ import departmentSlice, {getDepartments} from "../store/department-slice";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
+import {toast} from 'react-toastify'
+import { Status } from "../model/status";
+
 
 const RegisterForm = (props: any) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const getStatus = useSelector((state: RootState) => state.user.status);
+  const getErrorMsg = useSelector((state: RootState) => state.user.errorMsg);
+
 
   useEffect(() => {
     dispatch(getDepartments());
@@ -65,7 +71,7 @@ const RegisterForm = (props: any) => {
 
     dispatch(createUser(userDetails));
     
-    history.push('/');
+    // history.push('/');
   };
 
   return (

@@ -100,11 +100,9 @@ const userSlice = createSlice({
 
     builder.addCase(loginUser.pending, (state, action) => {
       state.status = Status.PENDING;
-      console.log("loginUser pending");
     })
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.status = Status.FULFILLED;
-      console.log("loginUser success");
     })
     builder.addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
       state.status = Status.REJECTED;

@@ -10,22 +10,22 @@ import userSlice from "../store/user-slice";
 import { checkLogin } from "../store/user-slice";
 import {toast} from 'react-toastify'
 import { Status } from "../model/status";
-
+import { useHistory } from "react-router-dom";
 
 const Homepage = () => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
 
-  const getStatus = useSelector((state: RootState) => state.user.status);
-  const getErrorMsg = useSelector((state: RootState) => state.user.errorMsg);
+  // const getStatus = useSelector((state: RootState) => state.user.status);
+  // const getErrorMsg = useSelector((state: RootState) => state.user.errorMsg);
+  // const history = useHistory();
 
-  useEffect(() => {
-    if (getStatus === Status.FULFILLED) {
-      toast("Success!")
-    } else if (getStatus === Status.REJECTED) {
-      toast(getStatus + ': ' + getErrorMsg);
-    }
-    console.log("getStatus:", getStatus);
-  }, [getStatus]);
+  // useEffect(() => {
+  //   if (getStatus === Status.REJECTED) {
+  //     toast("Rejected: " + getErrorMsg);
+  //   } else if (getStatus === Status.FULFILLED) {
+  //     toast("Success!")
+  //   }
+  // }, [getStatus])
 
   return (<React.Fragment>
     {isLoggedIn ? <Employees /> : <Login />}
