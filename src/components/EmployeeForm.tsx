@@ -25,6 +25,7 @@ import { Department } from "../model/department";
 
 import { Button } from "@mui/material";
 import { getDepartments } from "../store/department-slice";
+import { useCookies } from "react-cookie";
 
 const EmployeeForm = (props: any) => {
   const dispatch = useAppDispatch();
@@ -35,6 +36,7 @@ const EmployeeForm = (props: any) => {
   const getErrorMsg = useSelector((state: RootState) => state.employee.errorMsg);
 
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
 
   useEffect(() => {
     dispatch(getDepartments());
@@ -54,7 +56,7 @@ const EmployeeForm = (props: any) => {
   useEffect(() => {
     if (editMode) {
       // Fetch current employee data
-      dispatch(fetchEmployeeById(getId));
+      dispatch(fetchEmployeeById({id: getId, token: cookies.jwttoken}));
     } 
   }, []);
 
@@ -95,6 +97,7 @@ const EmployeeForm = (props: any) => {
           name: enteredName,
           salary: enteredSalary,
           department: enteredDepartment,
+          token: cookies.jwttoken
         })
       );
 
@@ -104,6 +107,7 @@ const EmployeeForm = (props: any) => {
           name: enteredName,
           salary: enteredSalary,
           department: enteredDepartment,
+          token: cookies.jwttoken
         })
       );
     }

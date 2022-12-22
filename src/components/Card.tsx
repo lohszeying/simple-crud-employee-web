@@ -11,6 +11,7 @@ import Modal from "react-modal";
 import { Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useCookies } from "react-cookie";
 
 const customStyles = {
   content: {
@@ -29,6 +30,7 @@ const Card = (props: any) => {
   const dispatch = useAppDispatch();
   const { id, name, salary, department } = props.employee;
   const history = useHistory();
+  const [cookies, setCookie, removeCookie] = useCookies(['jwttoken']);
 
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
@@ -58,7 +60,7 @@ const Card = (props: any) => {
   // https://stackoverflow.com/questions/45089866/specifying-onclick-event-type-with-typescript-and-react-konva
   const deleteEmployeeHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    dispatch(deleteEmployee(id));
+    dispatch(deleteEmployee({id: id, token: cookies.jwttoken}));
   };
 
   return (

@@ -82,6 +82,7 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     editIsLoggedIn(state, action) {
+      console.log("editing!!, action.payload:", action.payload);
       state.isLoggedIn = action.payload;
     }
   },
@@ -91,7 +92,6 @@ const userSlice = createSlice({
     })
     builder.addCase(createUser.fulfilled, (state, action) => {
       state.status = Status.FULFILLED;
-      // state.isLoggedIn = true;
     })
     builder.addCase(createUser.rejected, (state, action: PayloadAction<any>) => {
       state.status = Status.REJECTED;
@@ -104,8 +104,7 @@ const userSlice = createSlice({
     })
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.status = Status.FULFILLED;
-      state.isLoggedIn = true;
-      state.token = action.payload;
+      // state.isLoggedIn = true;
     })
     builder.addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
       state.status = Status.REJECTED;

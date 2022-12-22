@@ -30,22 +30,32 @@ export const fetchAllEmployees = createAsyncThunk(
 export const fetchEmployeeById = createAsyncThunk(
   'employees/fetchById',
   // Declare the type your function argument here:
-  async (payload: number, thunkApi) => {
-
-    const response = await axios.get(`http://localhost:3000/employee/${payload}`);
-
-    return response.data as Employee;
+  async (payload: {id: number, token: string}, thunkApi) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/employee/${payload.id}`, {
+        headers: {
+          jwttoken: "Bearer " + payload.token
+        }
+      });
+      return response.data as Employee;
+    } catch (e) {
+      return thunkApi.rejectWithValue(e);
+    }
   }
 );
 
 export const deleteEmployee = createAsyncThunk(
   'employees/delete',
   // Declare the type your function argument here:
-  async (payload: number, thunkApi) => {
+  async (payload: {id: number, token: string}, thunkApi) => {
     try {
-      await axios.delete(`http://localhost:3000/employee/${payload}`);
+      await axios.delete(`http://localhost:3000/employee/${payload.id}`, {
+        headers: {
+          jwttoken: "Bearer " + payload.token
+        }
+      });
 
-      return payload as number;
+      return payload.id as number;
     } catch (e) {
       return thunkApi.rejectWithValue(e);
     }
@@ -55,12 +65,16 @@ export const deleteEmployee = createAsyncThunk(
 export const addEmployee = createAsyncThunk(
   'employees/add',
   // Declare the type your function argument here:
-  async (payload: {name: string, salary: number, department: string}, thunkApi) => {
+  async (payload: {name: string, salary: number, department: string, token: string}, thunkApi) => {
     try {
       await axios.post(`http://localhost:3000/employee`, {
         name: payload.name,
         salary: payload.salary,
         department: payload.department
+      }, {
+        headers: {
+          jwttoken: "Bearer " + payload.token
+        }
       });
     } catch (e) {
       return thunkApi.rejectWithValue(e);
@@ -71,12 +85,16 @@ export const addEmployee = createAsyncThunk(
 export const updateEmployee = createAsyncThunk(
   'employees/update',
   // Declare the type your function argument here:
-  async (payload: {id: number, name: string, salary: number, department: string}, thunkApi) => {
+  async (payload: {id: number, name: string, salary: number, department: string, token: string}, thunkApi) => {
     try {
       await axios.put(`http://localhost:3000/employee/${payload.id}`, {
         name: payload.name,
         salary: payload.salary,
         department: payload.department
+      }, {
+        headers: {
+          jwttoken: "Bearer " + payload.token
+        }
       });
     } catch (e) {
       return thunkApi.rejectWithValue(e);
@@ -169,7 +187,7 @@ const employeeSlice = createSlice({
     })
     builder.addCase(updateEmployee.rejected, (state, action: PayloadAction<any>) => {
       state.status = Status.REJECTED;
-      state.errorMsg = action.payload.response.statusText;
+      state.errorMsg = action.payload.response.data.errorMessage;
     })
   }
 });
